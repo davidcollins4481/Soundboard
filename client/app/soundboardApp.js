@@ -1,4 +1,8 @@
-var soundboardApp = angular.module('soundboardApp', ['ngRoute', 'soundboardControllers']);
+var soundboardApp = angular.module('soundboardApp', [
+    'ngRoute',
+    'soundboardControllers',
+    'soundboardDirectives'
+    ]);
 
 soundboardApp
     .config(['$routeProvider',
@@ -7,8 +11,12 @@ soundboardApp
                 when('/', {
                     templateUrl: '/js/app/views/soundboard.html',
                     controller: 'SoundboardController'
-                }).
-                otherwise({
+                })
+                .when('/upload-sound', {
+                    templateUrl: '/js/app/views/uploader.html',
+                    controller: 'SoundboardUploader'
+                })
+                .otherwise({
                     redirectTo: '/'
                 });
         }

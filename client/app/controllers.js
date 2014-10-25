@@ -38,7 +38,35 @@ soundboardControllers.controller('SoundboardController',
                     console.log('error');
                 });
         }
+    }
+);
 
+soundboardControllers.controller('SoundboardUploader',
+    function ($scope, $http, $routeParams) {
+        $scope.uploading = [];
 
+        $scope.$on('filesDragged', function (event, files) {
+
+            var data = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                data.append('file', files[i]);
+            }
+
+            $http.post('/upload', data, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function(data) {
+                console.log('success');
+                $scope.sounds = data;
+            })
+            .error(function() {
+                console.log('fail');
+            });
+
+            $scope.$apply(function(){
+                $scope.uploading = files;
+            });
+        });
     }
 );
