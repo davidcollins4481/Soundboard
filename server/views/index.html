@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="soundboardApp">
+    <head>
+        <meta charset="UTF-8">
+        <title>test</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <%- include header.html %>
+        <div ng-controller="soundboardUploader">
+            <form name="audio-upload" action="/upload" method="post" enctype="multipart/form-data">
+                <!--
+                    Label: <input type="text" name="label"><br><br>
+                    <input type="file" name="upload-file" multiple="true"><br>
+                    <input type="submit" value="Submit">
+                 -->
+                 <div ng-repeat="field in fields">
+
+                 </div>
+             </form>
+
+            <div drop-target class="dropzone">Drag files here</div>
+
+            <ul>
+                <li ng-repeat="file in uploading">
+                    {{file.name}} {{file.type}} {{file.size}}
+                </li>
+            </ul>
+        </div>
+
+        <div ng-controller="soundboardController">
+            <h1>sounds</h1>
+            <div ng-repeat="sound in sounds">
+                <p>{{sound.originalName}}</p>
+                <a class="info" href="#">Info</a>
+                <a class="delete" href="#" ng-click="delete(this)">delete</a>
+                <img src="/img/play.png" alt="" ng-click="toggle(this, $event)">
+                <audio class="stopped">
+                    <source ng-src="{{ audioRootDirectory + sound.name}}" type="{{sound.mimeType}}" />
+                </audio>
+            </div>
+        </div>
+
+        <script src="/bower/angular/angular.min.js"></script>
+        <script src="/js/app/soundboardApp.js"></script>
+        <script src="/js/app/controllers/soundboardController.js"></script>
+    </body>
+</html>
