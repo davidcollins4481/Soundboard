@@ -10,11 +10,11 @@ soundboardApp
             $routeProvider.
                 when('/', {
                     templateUrl: '/js/app/views/soundboard.html',
-                    controller: 'SoundboardController'
+                    controller: 'soundboardController'
                 })
                 .when('/upload-sound', {
                     templateUrl: '/js/app/views/uploader.html',
-                    controller: 'SoundboardUploader'
+                    controller: 'soundboardUploader'
                 })
                 .otherwise({
                     redirectTo: '/'

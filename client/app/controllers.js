@@ -1,9 +1,10 @@
-var soundboardControllers = angular.module('soundboardControllers', []);
+var soundboardControllers = angular.module('soundboardControllers', ['soundboardFactories']);
 
-soundboardControllers.controller('SoundboardController',
-    function($scope, $http, $routeParams) {
+soundboardControllers.controller('soundboardController',
+    function($scope, $http, $routeParams, soundsFactory) {
         $scope.audioRootDirectory = '/sounds/';
-        $http.get('/getsounds')
+
+        soundsFactory.getSounds()
             .success(function(data) {
                 $scope.sounds = data;
             });
@@ -27,9 +28,7 @@ soundboardControllers.controller('SoundboardController',
         $scope.delete = function($event, $obj) {
             $event.preventDefault();
             console.log('deleting ' + this.sound.name);
-            $http.post('/deletesound',
-                    {filename: this.sound.name}
-                )
+            soundsFactory.deleteSound(this.sound.name)
                 .success(function(data) {
                     $scope.sounds = data;
                     console.log('deleted');
@@ -41,8 +40,8 @@ soundboardControllers.controller('SoundboardController',
     }
 );
 
-soundboardControllers.controller('SoundboardUploader',
-    function ($scope, $http, $routeParams) {
+soundboardControllers.controller('soundboardUploader',
+    function ($scope, $http, $routeParams, soundsFactory) {
         $scope.uploading = [];
 
         $scope.$on('filesDragged', function (event, files) {
@@ -52,17 +51,14 @@ soundboardControllers.controller('SoundboardUploader',
                 data.append('file', files[i]);
             }
 
-            $http.post('/upload', data, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            })
-            .success(function(data) {
-                console.log('success');
-                $scope.sounds = data;
-            })
-            .error(function() {
-                console.log('fail');
-            });
+            soundsFactory.addSounds(data)
+                .success(function(data) {
+                    console.log('success');
+                    $scope.sounds = data;
+                })
+                .error(function() {
+                    console.log('fail');
+                });
 
             $scope.$apply(function(){
                 $scope.uploading = files;
