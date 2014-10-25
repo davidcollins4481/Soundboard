@@ -3,8 +3,8 @@
     <div ng-repeat="sound in sounds">
         <p>{{sound.originalName}}</p>
         <a class="info" href="#">Info</a>
-        <a class="delete" href="#" ng-click="delete(this)">delete</a>
-        <img src="/img/play.png" alt="" ng-click="toggle(this,$event)">
+        <a class="delete" href="#" ng-click="delete($event, this)">delete</a>
+        <img src="/img/play.png" alt="" ng-click="toggle($event, this)">
         <audio class="stopped">
             <source ng-src="{{ audioRootDirectory + sound.name}}" type="{{sound.mimeType}}" />
         </audio>

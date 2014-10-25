@@ -8,7 +8,7 @@ soundboardControllers.controller('SoundboardController',
                 $scope.sounds = data;
             });
 
-        $scope.toggle = function(obj, $event) {
+        $scope.toggle = function($event, $obj) {
             console.log($event);
             var button = $event.currentTarget;
             var audio = button.nextElementSibling;
@@ -24,8 +24,8 @@ soundboardControllers.controller('SoundboardController',
             }
         }
 
-        $scope.delete = function(e) {
-            e.preventDefault();
+        $scope.delete = function($event, $obj) {
+            $event.preventDefault();
             console.log('deleting ' + this.sound.name);
             $http.post('/deletesound',
                     {filename: this.sound.name}
