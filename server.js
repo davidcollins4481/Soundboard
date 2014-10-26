@@ -104,7 +104,6 @@ app.post('/save', function(req, res) {
     });
 });
 
-
 app.post('/delete', function(req, res) {
     var filename = req.body.filename;
 
@@ -113,6 +112,7 @@ app.post('/delete', function(req, res) {
     };
 
     nosql.remove(filter, function() {
+        //TODO: delete file
         getSounds(function(sounds) {
             res.json(sounds);
             res.status(200).end();

@@ -1,0 +1,28 @@
+input[type="text"] {
+    height: 30px;
+    min-width: 300px;
+    margin: 10px 0;
+    display: block;
+}
+
+button {
+    display: block;
+    border: 1px solid #ccc;
+    background-color: white;
+    width: 75px;
+    height: 40px;
+    font-size: 13px;
+    text-transform: capitalize;
+    @include border-top-radius(5px);
+    @include border-bottom-radius(5px);
+    @include border-left-radius(5px);
+    @include border-right-radius(5px);
+
+    &.saved {
+        border-color: $green;
+    }
+
+    &.unsaved {
+        border-color: $red;
+    }
+}
