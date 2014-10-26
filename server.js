@@ -17,11 +17,16 @@ app.use(multer({
     },
     onFileUploadComplete: function(file) {
         var callback = function() {};
+
+        // 'name' acts as kind of a primary key
         nosql.insert({
             originalName: file.originalname,
-            name: file.name,
+            name: file.name.split('.')[0],
+            _extension: file.name.split('.')[1],
             mimeType: file.mimetype,
-            fileSize: file.size
+            fileSize: file.size,
+            tags: '',
+            description: '',
         }, callback);
     }
 }))
@@ -52,6 +57,17 @@ function getSounds(callback) {
         callback(all);
     });
 }
+
+app.get('/getsound', function(req, res) {
+    var filter = function(doc) {
+        return doc.name == req.param('name');
+    };
+
+    nosql.one(filter, function(sound) {
+        res.json(sound);
+        res.status(200).end();
+    });
+});
 
 app.get('/', function(req, res){
     res.render('index.html', { text: 'The index page!' });

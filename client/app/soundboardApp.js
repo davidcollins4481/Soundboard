@@ -1,7 +1,7 @@
 var soundboardApp = angular.module('soundboardApp', [
     'ngRoute',
-    'soundboardControllers',
-    'soundboardDirectives'
+    'soundboard.controllers',
+    'soundboard.directives'
     ]);
 
 soundboardApp
@@ -15,6 +15,10 @@ soundboardApp
                 .when('/upload-sound', {
                     templateUrl: '/js/app/views/uploader.html',
                     controller: 'soundboardUploader'
+                })
+                .when('/sound-detail/:name', {
+                    templateUrl: '/js/app/views/soundDetail.html',
+                    controller: 'soundboardDetail'
                 })
                 .otherwise({
                     redirectTo: '/'

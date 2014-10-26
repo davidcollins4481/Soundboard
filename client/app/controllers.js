@@ -1,10 +1,10 @@
-var soundboardControllers = angular.module('soundboardControllers', ['soundboardFactories']);
+var soundboardControllers = angular.module('soundboard.controllers', ['soundboard.factories']);
 
 soundboardControllers.controller('soundboardController',
     function($scope, $http, $routeParams, soundsFactory) {
         $scope.audioRootDirectory = '/sounds/';
 
-        soundsFactory.getSounds()
+        soundsFactory.getAllSounds()
             .success(function(data) {
                 $scope.sounds = data;
             });
@@ -64,5 +64,22 @@ soundboardControllers.controller('soundboardUploader',
                 $scope.uploading = files;
             });
         });
+    }
+);
+
+soundboardControllers.controller('soundboardDetail',
+    function ($scope, $http, $routeParams, soundsFactory) {
+        soundsFactory.getSound($routeParams.name)
+            .success(function(data) {
+                $scope.sound = data;
+            })
+            .error(function() {
+                console.log('fail');
+            });
+
+        $scope.update = function() {
+            console.log($scope.sound);
+            
+        }
     }
 );

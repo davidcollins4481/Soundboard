@@ -1,8 +1,16 @@
-var soundFactory =  angular.module('soundboardFactories', [])
+var soundFactory =  angular.module('soundboard.factories', [])
 .factory('soundsFactory', function($http) {
     var factory = {};
-    factory.getSounds = function() {
+    factory.getAllSounds = function() {
         return $http.get('/getsounds');
+    }
+
+    factory.getSound = function(name) {
+        return $http.get('getsound', {
+            params: {
+                name: name
+            }
+        });
     }
 
     factory.deleteSound = function(filename) {
@@ -16,6 +24,10 @@ var soundFactory =  angular.module('soundboardFactories', [])
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         });
+    }
+
+    factory.save = function(sound) {
+        
     }
 
     return factory;

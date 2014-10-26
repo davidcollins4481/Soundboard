@@ -1,4 +1,4 @@
-var soundboardDirectives = angular.module('soundboardDirectives', []);
+var soundboardDirectives = angular.module('soundboard.directives', []);
 
 soundboardDirectives.directive('dropTarget', function(){
     return {
@@ -8,7 +8,6 @@ soundboardDirectives.directive('dropTarget', function(){
                 console.log('drag');
                 e.stopPropagation();
                 e.preventDefault();
-
             });
 
             $element.bind('dragenter', function(e) {
