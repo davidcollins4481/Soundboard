@@ -87,10 +87,25 @@ app.get('/getsounds', function(req, res) {
     })
 });
 
+app.post('/save', function(req, res) {
+    var sound = req.body.sound;
+
+    nosql.update(function(doc) {
+
+        if (doc.name === sound.name) {
+            for (var property in sound) {
+                doc[property] = sound[property];
+            }
+        }
+
+        return doc;
+    }, function() {});
+});
+
+
 app.post('/deletesound', function(req, res) {
     var filename = req.body.filename;
 
-    console.log("file: " + filename);
     var filter = function(doc) {
         return doc.name == filename;
     };

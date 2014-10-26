@@ -1,7 +1,7 @@
 <div>
     <h1>sounds</h1>
     <div ng-repeat="sound in sounds">
-        <p>{{sound.originalName}}</p>
+        <p>{{sound.description || sound.originalName}}</p>
         <a class="info" href="/#/sound-detail/{{sound.name}}">Info</a>
         <a class="delete" href="#" ng-click="delete($event, this)">delete</a>
         <img src="/img/play.png" alt="" ng-click="toggle($event, this)">

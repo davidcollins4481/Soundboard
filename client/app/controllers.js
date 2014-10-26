@@ -4,7 +4,7 @@ soundboardControllers.controller('soundboardController',
     function($scope, $http, $routeParams, soundsFactory) {
         $scope.audioRootDirectory = '/sounds/';
 
-        soundsFactory.getAllSounds()
+        soundsFactory.getAll()
             .success(function(data) {
                 $scope.sounds = data;
             });
@@ -28,7 +28,7 @@ soundboardControllers.controller('soundboardController',
         $scope.delete = function($event, $obj) {
             $event.preventDefault();
             console.log('deleting ' + this.sound.name);
-            soundsFactory.deleteSound(this.sound.name)
+            soundsFactory.delete(this.sound.name)
                 .success(function(data) {
                     $scope.sounds = data;
                     console.log('deleted');
@@ -51,7 +51,7 @@ soundboardControllers.controller('soundboardUploader',
                 data.append('file', files[i]);
             }
 
-            soundsFactory.addSounds(data)
+            soundsFactory.add(data)
                 .success(function(data) {
                     console.log('success');
                     $scope.sounds = data;
@@ -69,7 +69,7 @@ soundboardControllers.controller('soundboardUploader',
 
 soundboardControllers.controller('soundboardDetail',
     function ($scope, $http, $routeParams, soundsFactory) {
-        soundsFactory.getSound($routeParams.name)
+        soundsFactory.get($routeParams.name)
             .success(function(data) {
                 $scope.sound = data;
             })
@@ -78,8 +78,8 @@ soundboardControllers.controller('soundboardDetail',
             });
 
         $scope.update = function() {
-            console.log($scope.sound);
-            
+            //console.log($scope.sound);
+            soundsFactory.save($scope.sound);
         }
     }
 );
