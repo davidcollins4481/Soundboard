@@ -67,8 +67,11 @@ soundboardControllers.controller('soundboardUploader',
     }
 );
 
-soundboardControllers.controller('soundboardDetail',
+soundboardControllers.controller('soundDetail',
     function ($scope, $http, $routeParams, soundsFactory) {
+        $scope.savedStatus = 'saved';
+        $scope.audioRootDirectory = '/sounds/';
+
         soundsFactory.get($routeParams.name)
             .success(function(data) {
                 $scope.sound = data;
@@ -78,8 +81,18 @@ soundboardControllers.controller('soundboardDetail',
             });
 
         $scope.update = function() {
-            //console.log($scope.sound);
-            soundsFactory.save($scope.sound);
-        }
+            soundsFactory.save($scope.sound)
+                .success(function() {
+                    $scope.savedStatus = 'saved';
+                })
+                .error(function() {
+                    console.log('fail');
+                })
+        };
+
+        $scope.changed = function() {
+            console.log('changed');
+            $scope.savedStatus = 'unsaved';
+        };
     }
 );

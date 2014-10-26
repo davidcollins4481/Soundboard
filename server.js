@@ -58,7 +58,7 @@ function getSounds(callback) {
     });
 }
 
-app.get('/getsound', function(req, res) {
+app.get('/get', function(req, res) {
     var filter = function(doc) {
         return doc.name == req.param('name');
     };
@@ -80,7 +80,7 @@ app.post('/upload', function (req, res) {
     })
 });
 
-app.get('/getsounds', function(req, res) {
+app.get('/getAll', function(req, res) {
     getSounds(function(sounds) {
         res.json(sounds);
         res.status(200).end();
@@ -99,11 +99,13 @@ app.post('/save', function(req, res) {
         }
 
         return doc;
-    }, function() {});
+    }, function() {
+        res.status(200).end();
+    });
 });
 
 
-app.post('/deletesound', function(req, res) {
+app.post('/delete', function(req, res) {
     var filename = req.body.filename;
 
     var filter = function(doc) {

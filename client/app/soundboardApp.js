@@ -18,7 +18,7 @@ soundboardApp
                 })
                 .when('/sound-detail/:name', {
                     templateUrl: '/js/app/views/soundDetail.html',
-                    controller: 'soundboardDetail'
+                    controller: 'soundDetail'
                 })
                 .otherwise({
                     redirectTo: '/'
