@@ -3,6 +3,7 @@ var soundboardControllers = angular.module('soundboard.controllers', ['soundboar
 soundboardControllers.controller('soundboardController',
     function($scope, $http, $routeParams, soundsFactory) {
         $scope.audioRootDirectory = '/sounds/';
+        $scope.extendedState = 'closed';
 
         soundsFactory.getAll()
             .success(function(data) {
@@ -36,6 +37,16 @@ soundboardControllers.controller('soundboardController',
                 .error(function() {
                     console.log('error');
                 });
+        }
+
+        $scope.openExtendedInfo = function(e) {
+            e.preventDefault();
+            $scope.extendedState = 'open';
+        }
+
+        $scope.closeExtendedInfo = function(e) {
+            e.preventDefault();
+            $scope.extendedState = 'closed';
         }
     }
 );

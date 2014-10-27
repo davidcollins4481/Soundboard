@@ -12,6 +12,23 @@
     p {
         margin: 0;
     }
+
+    a.info {
+        &:hover {
+
+        }
+    }
+
+    .info-extended {
+        height: 0;
+        overflow: hidden;
+        @include transition (height .5s ease-in-out, background-color 4s );
+        &.open {
+            height:200px;
+            background-color: #eee;
+            border: 1px solid #D0CFCF;
+        }
+    }
 }
 
 .uploader-container {
@@ -22,7 +39,7 @@
         margin-top: 40px;
 
         &.active {
-            border-color: green;
+            border-color: $green;
             background-color: rgb(152, 209, 152);
         }
     }
