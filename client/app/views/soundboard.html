@@ -12,7 +12,8 @@
 
         <p>{{sound.description || sound.originalName}}</p>
         <p>tags: <i>{{sound.tags || '-'}}</i></p>
-        <a class="info" href="#" ng-click="openExtendedInfo($event)">Info</a>
+        <a class="info" href="/#/sound-detail/{{sound.name}}">Info</a>
+        <!-- <a class="info" href="#" ng-click="openExtendedInfo(\$event)">Info</a> -->
 
         <div class="info-extended {{extendedState}}">
             <input type="text" placeholder="description" value="{{sound.description}}">

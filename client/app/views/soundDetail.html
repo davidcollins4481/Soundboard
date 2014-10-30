@@ -1,7 +1,4 @@
 <div class="">
-    <p><b>Original name:</b> {{sound.originalName}}</p>
-    <p><b>File Size:</b> {{sound.fileSize}} bytes</p>
-
     <audio controls>
         <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
             type="{{sound.mimeType}}" />
@@ -11,11 +8,11 @@
 
     <input
         type="text"
-        name="description"
+        name="name"
         ng-model="sound.description"
         ng-change="changed()"
         value="{{sound.description}}"
-        placeholder="Description">
+        placeholder="Name">
 
     <input
         type="text"
@@ -26,5 +23,9 @@
         placeholder="Tags">
 
     <button ng-click="update()" class="{{savedStatus}}">{{savedStatus}}</button>
+
+    <p><b>Original File name:</b> {{sound.originalName}}</p>
+    <p><b>File Size:</b> {{sound.fileSize / 1000 | number:0}} kilobytes</p>
+    <p><b>Mime Type:</b> {{sound.mimeType}}</p>
 
 </div>

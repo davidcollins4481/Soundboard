@@ -79,7 +79,7 @@ soundboardControllers.controller('soundboardUploader',
 );
 
 soundboardControllers.controller('soundDetail',
-    function ($scope, $http, $routeParams, soundsFactory) {
+    function ($scope, $http, $routeParams, $location, soundsFactory) {
         $scope.savedStatus = 'saved';
         $scope.audioRootDirectory = '/sounds/';
 
@@ -95,6 +95,7 @@ soundboardControllers.controller('soundDetail',
             soundsFactory.save($scope.sound)
                 .success(function() {
                     $scope.savedStatus = 'saved';
+                    $location.path("/");
                 })
                 .error(function() {
                     console.log('fail');
