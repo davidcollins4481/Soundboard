@@ -53,7 +53,7 @@ soundboardControllers.controller('soundboardController',
 
 soundboardControllers.controller('soundboardUploader',
     function ($scope, $http, $routeParams, soundsFactory) {
-        $scope.uploading = [];
+        $scope.uploaded  = [];
 
         $scope.$on('filesDragged', function (event, files) {
 
@@ -65,15 +65,26 @@ soundboardControllers.controller('soundboardUploader',
             soundsFactory.add(data)
                 .success(function(data) {
                     console.log('success');
-                    $scope.sounds = data;
+                    data.forEach(function(d) {
+                        d.savedStatus = 'unsaved';
+                    });
+
+                    $scope.uploaded = data;
                 })
                 .error(function() {
                     console.log('fail');
                 });
 
-            $scope.$apply(function(){
-                $scope.uploading = files;
-            });
+
+            $scope.update = function(sound) {
+                soundsFactory.save(sound)
+                    .success(function() {
+                        sound.savedStatus = 'saved';
+                    })
+                    .error(function() {
+                        console.log('fail');
+                    })
+            };
         });
     }
 );

@@ -51,9 +51,12 @@ var server = app.listen(3000, function() {
 });
 
 // functions to move
-function getSounds(callback) {
+function getSounds(filter, callback) {
     callback = callback || function() {};
-    nosql.all(function(doc) { return doc;}, function(all) {
+    var filter = filter || function(doc) { return doc;};
+
+
+    nosql.all(filter, function(all) {
         callback(all);
     });
 }
@@ -74,14 +77,31 @@ app.get('/', function(req, res){
 });
 
 app.post('/upload', function (req, res) {
-    getSounds(function(sounds) {
+    // only return the uploaded files
+    var files = req.files.file.length ? req.files.file : [req.files.file];
+
+    var nameMap = {};
+    files.forEach(function(n) {
+        var filename = n.name.split('.')[0];
+        nameMap[filename] = true;
+    });
+
+    var filter = function(sound) {
+        if (nameMap[sound.name]) {
+            return sound;
+        }
+    }
+
+    var complete = function(sounds) {
         res.json(sounds);
         res.status(200).end();
-    })
+    };
+
+    getSounds(filter, complete);
 });
 
 app.get('/getAll', function(req, res) {
-    getSounds(function(sounds) {
+    getSounds(undefined, function(sounds) {
         res.json(sounds);
         res.status(200).end();
     })
@@ -113,7 +133,7 @@ app.post('/delete', function(req, res) {
 
     nosql.remove(filter, function() {
         //TODO: delete file
-        getSounds(function(sounds) {
+        getSounds(undefined, function(sounds) {
             res.json(sounds);
             res.status(200).end();
         });

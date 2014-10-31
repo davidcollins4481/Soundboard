@@ -1,11 +1,30 @@
 <div class="uploader-container">
     <div drop-target class="dropzone">
-        <p>Drag files here</p>
+        <p>+</p>
     </div>
 
-    <ul>
-        <li ng-repeat="file in uploading">
-            {{file.name}} {{file.type}} {{file.size}}
-        </li>
-    </ul>
+    <div class="uploaded" ng-repeat="sound in uploaded">
+        <p>Uploaded</p>
+        <input
+            type="text"
+            name="name"
+            ng-model="sound.description"
+            ng-change="changed()"
+            value="{{sound.description}}"
+            placeholder="Name">
+
+        <input
+            type="text"
+            name="tags"
+            ng-model="sound.tags"
+            ng-change="changed()"
+            value="{{sound.tags}}"
+            placeholder="Tags">
+
+        <button ng-click="update(sound)" class="{{sound.savedStatus}}">{{sound.savedStatus}}</button>
+
+        <p><b>Original File name:</b> {{sound.originalName}}</p>
+        <p><b>File Size:</b> {{sound.fileSize / 1000 | number:0}} kilobytes</p>
+        <p><b>Mime Type:</b> {{sound.mimeType}}</p>
+    </div>
 </div>

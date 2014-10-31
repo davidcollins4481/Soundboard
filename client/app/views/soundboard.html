@@ -1,6 +1,6 @@
 <div class="sound-container">
     <!-- <h1>Soundboard</h1> -->
-    <input type="text" ng-model="search" placeholder="Search...">
+    <input type="text" ng-model="search" placeholder="Search..." autoFocus>
     <div ng-repeat="sound in sounds | filter:search" class="sound">
         <div class="sound-inner">
             <img src="/img/play.png" alt="" ng-click="toggle($event, this)">
