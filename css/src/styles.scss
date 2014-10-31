@@ -1,16 +1,54 @@
 @import 'bower_components/bourbon/app/assets/stylesheets/bourbon';
+@import 'functions';
 @import 'common';
 @import 'forms';
 
-.sound {
-    margin-top: 40px;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    //text-align: center;
+}
 
-    &:first-of-type {
-        margin-top: 0;
+.buttons {
+    a {
+        display: inline-block;
+        margin: 10px 2% 0 2%;
+        text-decoration: none;
+        font-size: 20px;
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+}
+
+.sound {
+    margin-bottom: 40px;
+    display: inline-block;
+    width: 20%;
+
+    @include breakpoint(1100px) {
+        width: 20%;
+    }
+
+    /* @include breakpoint(1100px) {
+        width: 25%;
+    } */
+
+    @include breakpoint(775px) {
+        width: 33%;
+    }
+
+    @include breakpoint(520px) {
+        width: 50%;
     }
 
     p {
         margin: 0;
+    }
+
+    p.description {
+        min-height: 50px;
+        padding-top: 10px;
     }
 
     a.info {
@@ -19,10 +57,18 @@
         }
     }
 
+    .sound-inner {
+        //margin: 0 auto;
+        width: 110px;
+        @include breakpoint(320px) {
+            width: 100%;
+        }
+    }
+
     .info-extended {
         height: 0;
         overflow: hidden;
-        @include transition (height .5s ease-in-out, background-color 4s );
+        @include transition (height .5s ease-in-out, background-color 4s);
         &.open {
             height:200px;
             background-color: #eee;

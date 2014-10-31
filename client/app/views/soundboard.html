@@ -1,28 +1,27 @@
-<div>
-    <h1>sounds</h1>
+<div class="sound-container">
+    <!-- <h1>Soundboard</h1> -->
     <input type="text" ng-model="search" placeholder="Search...">
-
     <div ng-repeat="sound in sounds | filter:search" class="sound">
+        <div class="sound-inner">
+            <img src="/img/play.png" alt="" ng-click="toggle($event, this)">
+            <audio class="stopped">
+                <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
+                    type="{{sound.mimeType}}" />
+            </audio>
 
-        <img src="/img/play.png" alt="" ng-click="toggle($event, this)">
-        <audio class="stopped">
-            <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
-                type="{{sound.mimeType}}" />
-        </audio>
+            <p class="description">{{sound.description || sound.originalName}}</p>
+            <p>tags: <i>{{sound.tags || '-'}}</i></p>
+            <a class="info" href="/#/sound-detail/{{sound.name}}">Info</a>
+            <!-- <a class="info" href="#" ng-click="openExtendedInfo(\$event)">Info</a> -->
 
-        <p>{{sound.description || sound.originalName}}</p>
-        <p>tags: <i>{{sound.tags || '-'}}</i></p>
-        <a class="info" href="/#/sound-detail/{{sound.name}}">Info</a>
-        <!-- <a class="info" href="#" ng-click="openExtendedInfo(\$event)">Info</a> -->
+            <div class="info-extended {{extendedState}}">
+                <input type="text" placeholder="description" value="{{sound.description}}">
+                <input type="text" placeholder="tags" value="{{sound.tags}}">
+                <button ng-click="save()" class="{{savedStatus}}">{{savedStatus}}</button>
+                <a href="#" ng-click="closeExtendedInfo($event)">Close</a>
+            </div>
 
-        <div class="info-extended {{extendedState}}">
-            <input type="text" placeholder="description" value="{{sound.description}}">
-            <input type="text" placeholder="tags" value="{{sound.tags}}">
-            <button ng-click="save()" class="{{savedStatus}}">{{savedStatus}}</button>
-            <a href="#" ng-click="closeExtendedInfo($event)">Close</a>
+            <a class="delete" href="#" ng-click="delete($event, this)">delete</a>
         </div>
-
-        <a class="delete" href="#" ng-click="delete($event, this)">delete</a>
-
     </div>
 </div>

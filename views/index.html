@@ -8,10 +8,15 @@
     </head>
     <body>
 
-        <a href="/#/">Soundboard</a><br>
-        <a href="#upload-sound">Upload</a>
+        <div class="container">
 
-        <div ng-view></div>
+            <div class="buttons">
+                <a href="/#/">Soundboard</a>
+                <a href="#upload-sound">Upload</a>
+            </div>
+
+            <div ng-view></div>
+        </div>
 
         <script src="/bower/angular/angular.min.js"></script>
         <script src="/bower/angular-route/angular-route.min.js"></script>
