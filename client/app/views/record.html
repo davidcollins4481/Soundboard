@@ -3,5 +3,11 @@
         Record a sound yourself
     </p>
 
-    <canvas id="analyser" width="320" height="100"></canvas>
+    <canvas id="analyser" width="320" height="150"></canvas>
+    <br>
+    <a href="#" ng-click="startRecording($event)">Start</a>
+    <br><br>
+    <a href="#" ng-click="stopRecording($event)">Stop</a>
+
+    <ul id="recordingslist"></ul>
 </div>

@@ -135,22 +135,60 @@ soundboardControllers.controller('soundRecorder',
 
             var initStream = function(stream) {
                 var audioContext = new AudioContext();
-                var analyser = audioContext.createAnalyser();
-
-                analyser.getByteTimeDomainData(dataArray);
-
+                var inputPoint = audioContext.createGain();
                 var micInput = audioContext.createMediaStreamSource(stream);
-                var gainNode = audioContext.createGain();
+                micInput.connect(inputPoint);
 
-                micInput.connect(analyser);
-                analyser.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+                var analyser = audioContext.createAnalyser();
+                //analyser.fftSize = 256; // thickness of bars - default is 2048
+
+                inputPoint.connect(analyser);
+
+                var zeroGain = audioContext.createGain();
+                zeroGain.gain.value = 0.0;
+                inputPoint.connect( zeroGain );
+                zeroGain.connect( audioContext.destination );
+
+                var recorder = new Recorder(micInput, {
+                    workerPath: '/bower/Recorderjs/recorderWorker.js'
+                });
+
+                $scope.stopRecording = function(e) {
+                    e.preventDefault();
+                    console.log('stopping');
+                    recorder && recorder.stop();
+                    var createDownloadLink = function() {
+                        recorder && recorder.exportWAV(function(blob) {
+                            var url = URL.createObjectURL(blob);
+                            var li = document.createElement('li');
+                            var au = document.createElement('audio');
+                            var hf = document.createElement('a');
+
+                            au.controls = true;
+                            au.src = url;
+                            hf.href = url;
+                            hf.download = new Date().toISOString() + '.wav';
+                            hf.innerHTML = hf.download;
+                            li.appendChild(au);
+                            li.appendChild(hf);
+                            document.querySelector('#recordingslist').appendChild(li);
+                        });
+                    };
+
+                    createDownloadLink();
+                    recorder.clear();
+                };
+
+                $scope.startRecording = function(e) {
+                    e.preventDefault();
+                    console.log('starting');
+                    recorder && recorder.record();
+                };
 
                 //dimensions of canvas
                 HEIGHT = canvas.height;
                 WIDTH = canvas.width;
 
-                analyser.fftSize = 256;
                 var bufferLength = analyser.frequencyBinCount;
                 var dataArray = new Uint8Array(bufferLength);
 
@@ -183,20 +221,20 @@ soundboardControllers.controller('soundRecorder',
             };
 
             navigator.getUserMedia(
-            {
-                "audio": {
-                    "mandatory": {
-                        "googEchoCancellation": "false",
-                        "googAutoGainControl": "false",
-                        "googNoiseSuppression": "false",
-                        "googHighpassFilter": "false"
+                {
+                    "audio": {
+                        "mandatory": {
+                            "googEchoCancellation": "false",
+                            "googAutoGainControl": "false",
+                            "googNoiseSuppression": "false",
+                            "googHighpassFilter": "false"
+                        },
+                        "optional": []
                     },
-                    "optional": []
-                },
-            }, initStream, function(e) {
-                alert('Error getting audio');
-                console.log(e);
-            });
+                }, initStream, function(e) {
+                    alert('Error getting audio');
+                    console.log(e);
+                });
         };
     }
 );
