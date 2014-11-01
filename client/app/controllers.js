@@ -119,3 +119,99 @@ soundboardControllers.controller('soundDetail',
         };
     }
 );
+
+soundboardControllers.controller('soundRecorder',
+    function ($scope, $http, $routeParams, $location, soundsFactory) {
+
+        $scope.init = function() {
+            console.log('init');
+            navigator.getUserMedia  = navigator.getUserMedia ||
+                      navigator.webkitGetUserMedia ||
+                      navigator.mozGetUserMedia ||
+                      navigator.msGetUserMedia;
+
+
+            var updateAnalyzers = function(time) {
+                var analyserContext = null;
+                // update analyzers
+                if (!analyserContext) {
+                    var canvas = document.getElementById("analyser");
+                    canvasWidth = canvas.width;
+                    canvasHeight = canvas.height;
+                    analyserContext = canvas.getContext('2d');
+                }
+
+                // analyzer draw code here
+                {
+                    var SPACING = 3;
+                    var BAR_WIDTH = 1;
+                    var numBars = Math.round(canvasWidth / SPACING);
+                    var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
+
+                    analyserNode.getByteFrequencyData(freqByteData);
+
+                    analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+                    analyserContext.fillStyle = '#F6D565';
+                    analyserContext.lineCap = 'round';
+                    var multiplier = analyserNode.frequencyBinCount / numBars;
+
+                    // Draw rectangle for each frequency bin.
+                    for (var i = 0; i < numBars; ++i) {
+                        var magnitude = 0;
+                        var offset = Math.floor( i * multiplier );
+                        // gotta sum/average the block, or we miss narrow-bandwidth spikes
+                        for (var j = 0; j< multiplier; j++)
+                            magnitude += freqByteData[offset + j];
+                        magnitude = magnitude / multiplier;
+                        var magnitude2 = freqByteData[i * multiplier];
+                        analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
+                        analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
+                    }
+                }
+
+                rafID = window.requestAnimationFrame( updateAnalysers );
+            }
+
+            var initStream = function(stream) {
+                var audioContext = new AudioContext();
+                inputPoint = audioContext.createGain();
+
+                // Create an AudioNode from the stream.
+                realAudioInput = audioContext.createMediaStreamSource(stream);
+                audioInput = realAudioInput;
+                audioInput.connect(inputPoint);
+
+                analyserNode = audioContext.createAnalyser();
+                analyserNode.fftSize = 2048;
+                inputPoint.connect( analyserNode );
+
+                audioRecorder = new Recorder(inputPoint, {
+                    workerPath: '/bower/Recorderjs/recorderWorker.js'
+                });
+
+                zeroGain = audioContext.createGain();
+                zeroGain.gain.value = 0.0;
+                inputPoint.connect( zeroGain );
+                zeroGain.connect( audioContext.destination );
+
+                updateAnalyzers();
+            };
+
+            navigator.getUserMedia(
+            {
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },
+            }, initStream, function(e) {
+                alert('Error getting audio');
+                console.log(e);
+            });
+        };
+    }
+);

@@ -20,6 +20,10 @@ soundboardApp
                     templateUrl: '/js/app/views/soundDetail.html',
                     controller: 'soundDetail'
                 })
+                .when('/record', {
+                    templateUrl: '/js/app/views/record.html',
+                    controller: 'soundRecorder'
+                })
                 .otherwise({
                     redirectTo: '/'
                 });
