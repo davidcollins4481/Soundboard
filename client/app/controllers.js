@@ -134,6 +134,7 @@ soundboardControllers.controller('soundRecorder',
             canvasCtx = canvas.getContext('2d');
 
             var initStream = function(stream) {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
                 var audioContext = new AudioContext();
                 var inputPoint = audioContext.createGain();
                 var micInput = audioContext.createMediaStreamSource(stream);
