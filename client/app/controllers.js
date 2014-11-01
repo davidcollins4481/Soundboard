@@ -130,71 +130,56 @@ soundboardControllers.controller('soundRecorder',
                       navigator.mozGetUserMedia ||
                       navigator.msGetUserMedia;
 
-
-            var updateAnalyzers = function(time) {
-                var analyserContext = null;
-                // update analyzers
-                if (!analyserContext) {
-                    var canvas = document.getElementById("analyser");
-                    canvasWidth = canvas.width;
-                    canvasHeight = canvas.height;
-                    analyserContext = canvas.getContext('2d');
-                }
-
-                // analyzer draw code here
-                {
-                    var SPACING = 3;
-                    var BAR_WIDTH = 1;
-                    var numBars = Math.round(canvasWidth / SPACING);
-                    var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
-
-                    analyserNode.getByteFrequencyData(freqByteData);
-
-                    analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
-                    analyserContext.fillStyle = '#F6D565';
-                    analyserContext.lineCap = 'round';
-                    var multiplier = analyserNode.frequencyBinCount / numBars;
-
-                    // Draw rectangle for each frequency bin.
-                    for (var i = 0; i < numBars; ++i) {
-                        var magnitude = 0;
-                        var offset = Math.floor( i * multiplier );
-                        // gotta sum/average the block, or we miss narrow-bandwidth spikes
-                        for (var j = 0; j< multiplier; j++)
-                            magnitude += freqByteData[offset + j];
-                        magnitude = magnitude / multiplier;
-                        var magnitude2 = freqByteData[i * multiplier];
-                        analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
-                        analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
-                    }
-                }
-
-                rafID = window.requestAnimationFrame( updateAnalysers );
-            }
+            var canvas = document.querySelector('#analyser');
+            canvasCtx = canvas.getContext('2d');
 
             var initStream = function(stream) {
                 var audioContext = new AudioContext();
-                inputPoint = audioContext.createGain();
+                var analyser = audioContext.createAnalyser();
 
-                // Create an AudioNode from the stream.
-                realAudioInput = audioContext.createMediaStreamSource(stream);
-                audioInput = realAudioInput;
-                audioInput.connect(inputPoint);
+                analyser.getByteTimeDomainData(dataArray);
 
-                analyserNode = audioContext.createAnalyser();
-                analyserNode.fftSize = 2048;
-                inputPoint.connect( analyserNode );
+                var micInput = audioContext.createMediaStreamSource(stream);
+                var gainNode = audioContext.createGain();
 
-                audioRecorder = new Recorder(inputPoint, {
-                    workerPath: '/bower/Recorderjs/recorderWorker.js'
-                });
+                micInput.connect(analyser);
+                analyser.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-                zeroGain = audioContext.createGain();
-                zeroGain.gain.value = 0.0;
-                inputPoint.connect( zeroGain );
-                zeroGain.connect( audioContext.destination );
+                //dimensions of canvas
+                HEIGHT = canvas.height;
+                WIDTH = canvas.width;
 
-                updateAnalyzers();
+                analyser.fftSize = 256;
+                var bufferLength = analyser.frequencyBinCount;
+                var dataArray = new Uint8Array(bufferLength);
+
+                canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+                function draw() {
+
+                    drawVisual = requestAnimationFrame(draw);
+
+                    analyser.getByteFrequencyData(dataArray);
+
+                    canvasCtx.fillStyle = 'rgb(255, 255, 255)';
+                    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+                    var barWidth = (WIDTH / bufferLength) * 2.5;
+                    var barHeight;
+                    var x = 0;
+
+                    for (var i = 0; i < bufferLength; i++) {
+                        barHeight = dataArray[i];
+
+                        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',155,255)';
+                        canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
+
+                        x += barWidth + 1;
+                    }
+                };
+
+                draw();
             };
 
             navigator.getUserMedia(
