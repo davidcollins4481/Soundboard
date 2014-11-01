@@ -1,6 +1,6 @@
 input[type="text"] {
     height: 30px;
-    min-width: 300px;
+    min-width: 260px;
     margin: 30px 0;
     display: block;
     padding: 5px;
@@ -15,10 +15,6 @@ button {
     height: 40px;
     font-size: 13px;
     text-transform: capitalize;
-    // @include border-top-radius(5px);
-    // @include border-bottom-radius(5px);
-    // @include border-left-radius(5px);
-    // @include border-right-radius(5px);
 
     &.saved {
         border-color: $green;
