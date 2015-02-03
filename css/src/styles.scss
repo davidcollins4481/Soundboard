@@ -6,7 +6,6 @@
 .container {
     max-width: 900px;
     margin: 0 auto;
-    //text-align: center;
 }
 
 .buttons {
@@ -54,10 +53,36 @@
     }
 
     .sound-inner {
-        //margin: 0 auto;
         width: 110px;
         @include breakpoint(320px) {
             width: 100%;
+        }
+        
+        .play {
+            width: 0px;
+            height: 0px;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 20px solid green;
+            display: inline-block;
+            transform: rotateZ(90deg);
+            cursor: pointer;
+            position: relative;
+            top: -8px;
+            &:hover {
+                border-bottom: 20px solid lightgreen;
+            }
+        }
+        
+        .stop {
+            width: 0px;
+            height: 0px;
+            border: 17px solid black;
+            display: inline-block;
+            cursor: pointer;
+            &:hover {
+                border: 17px solid #666;
+            }
         }
     }
 

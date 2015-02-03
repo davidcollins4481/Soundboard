@@ -3,6 +3,4 @@ node_modules
 bower_components
 *.swp
 .DS_Store
-data/*
-audio/*
 .idea/

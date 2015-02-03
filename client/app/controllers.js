@@ -15,14 +15,12 @@ soundboardControllers.controller('soundboardController',
             var button = $event.currentTarget;
             var audio = button.nextElementSibling;
 
-            if (audio.className == "stopped") {
+            if (button.className === "stop") {
                 audio.play();
-                audio.className = "";
-                button.src = "/img/stop.png";
+                button.className = "play";
             } else {
                 audio.pause();
-                audio.className = "stopped";
-                button.src = "/img/play.png";
+                button.className = "stop";
             }
         }
 
