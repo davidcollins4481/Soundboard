@@ -15,6 +15,13 @@ soundboardControllers.controller('soundboardController',
             var button = $event.currentTarget;
             var audio = button.nextElementSibling;
 
+            audio.removeEventListener('ended');
+            var resetState = function() {
+                this.className = 'stop';
+            }.bind(button);
+
+            audio.addEventListener("ended", resetState);
+
             if (button.className === "stop") {
                 audio.play();
                 button.className = "play";
