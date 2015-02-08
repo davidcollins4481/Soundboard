@@ -13,23 +13,11 @@ app.use(multer({
     onFileUploadStart: function(file) {
     },
     onFileUploadData: function(file, data) {
-        console.log(data.length + ' of ' + file.size + ' arrived')
     },
     onFileUploadComplete: function(file) {
-        var callback = function() {};
-
-        // 'name' acts as kind of a primary key
-        nosql.insert({
-            originalName: file.originalname,
-            name: file.name.split('.')[0],
-            _extension: file.name.split('.')[1],
-            mimeType: file.mimetype,
-            fileSize: file.size,
-            tags: '',
-            description: '',
-        }, callback);
+        console.log("file uploaded");
     }
-}))
+}));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,9 +69,19 @@ app.post('/upload', function (req, res) {
     var files = req.files.file.length ? req.files.file : [req.files.file];
 
     var nameMap = {};
-    files.forEach(function(n) {
-        var filename = n.name.split('.')[0];
+    var sounds = [];
+    files.forEach(function(file) {
+        var filename = file.name.split('.')[0];
         nameMap[filename] = true;
+        sounds.push({
+            originalName: file.originalname,
+            name: file.name.split('.')[0],
+            _extension: file.name.split('.')[1],
+            mimeType: file.mimetype,
+            fileSize: file.size,
+            tags: '',
+            description: ''
+        });
     });
 
     var filter = function(sound) {
@@ -97,7 +95,9 @@ app.post('/upload', function (req, res) {
         res.status(200).end();
     };
 
-    getSounds(filter, complete);
+    nosql.insert(sounds, function() {
+        getSounds(filter, complete);
+    });
 });
 
 app.get('/getAll', function(req, res) {
