@@ -1,4 +1,5 @@
 $green: green;
+$lightgreen: lightgreen;
 $red: red;
 
 body {
@@ -13,3 +14,6 @@ ul {
         padding-top: 10px;
     }
 }
+
+a:link { color: #0000EE; }
+a:visited { color: #0000EE; }

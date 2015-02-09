@@ -43,7 +43,6 @@
 
     p.description {
         min-height: 50px;
-        padding-top: 10px;
     }
 
     a.info {
@@ -57,31 +56,65 @@
         @include breakpoint(320px) {
             width: 100%;
         }
-        
-        .play {
-            width: 0px;
-            height: 0px;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 20px solid green;
+
+        .btn-container {
             display: inline-block;
-            transform: rotateZ(90deg);
-            cursor: pointer;
-            position: relative;
-            top: -8px;
-            &:hover {
-                border-bottom: 20px solid lightgreen;
+            height: 40px;
+            width: 40px;
+            border-radius: 22px;
+            text-align: center;
+
+            .stop {
+                width: 27px;
+                height: 27px;
+                @include linear-gradient(black, #666);
+                display: inline-block;
+                cursor: pointer;
+
+                &:hover {
+                    @include linear-gradient(
+                        black, lighten(#666, 10%)
+                    );
+                }
             }
-        }
-        
-        .stop {
-            width: 0px;
-            height: 0px;
-            border: 17px solid black;
-            display: inline-block;
-            cursor: pointer;
-            &:hover {
-                border: 17px solid #666;
+
+            .play {
+                width: 23px;
+                height: 19px;
+                display: inline-block;
+                cursor: pointer;
+                position: relative;
+                top: 5px;
+                left: -7px;
+                @include background(linear-gradient(left, $green, $lightgreen));
+                transform: rotateZ(135deg);
+
+                &:after {
+                    background: #fff;
+                    content: "";
+                    height: 44px;
+                    width: 25px;
+                    position: absolute;
+                    transform: rotateZ(45deg);
+                    left: 2px;
+                    top: 0;
+                }
+
+                &:hover {
+                    @include background(linear-gradient(left, lighten($green, 10%), $lightgreen));
+                }
+            }
+
+            .record {
+                height: 35px;
+                width: 35px;
+                cursor: pointer;
+                @include background(linear-gradient(red, lighten(red, 30%)));
+                display: inline-block;
+                border-radius: 20px;
+                &:hover {
+                    @include background(linear-gradient(red, lighten(red, 40%)));
+                }
             }
         }
     }

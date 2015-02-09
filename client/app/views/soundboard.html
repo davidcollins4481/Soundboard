@@ -4,13 +4,19 @@
     <div ng-repeat="sound in sounds | filter:search" class="sound">
         
         <div class="sound-inner">
-            <!--<img src="/img/play.png" alt="" ng-click="toggle($event, this)">-->
+            
             <span class="stop" ng-click="toggle($event, this)"></span>
-            <audio class="stopped">
-                <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
-                    type="{{sound.mimeType}}" />
-            </audio>
 
+            <div class="btn-container">
+                <span class="stop" ng-click="toggle($event, this)"></span>
+                <audio class="stopped">
+                    <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
+                            type="{{sound.mimeType}}" />
+                </audio>
+                
+            </div>
+
+            
             <p class="description">{{sound.description || sound.originalName}}</p>
             <p>tags: <i>{{sound.tags || '-'}}</i></p>
             <a class="info" href="/#/sound-detail/{{sound.name}}">Info</a>
