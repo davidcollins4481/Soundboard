@@ -102,6 +102,19 @@ soundboardControllers.controller('soundDetail',
         soundsFactory.get($routeParams.name)
             .success(function(data) {
                 $scope.sound = data;
+
+                var context = new AudioContext();
+                var audioSrc = $scope.audioRootDirectory + data.name + '.' + data._extension;
+
+                var onComplete = function(buffers) {
+                    debugger;
+                    // time length of audio file:
+                    // length / sampleRate
+                };
+
+                var bufferLoader = new BufferLoader(context, [audioSrc], onComplete);
+
+                bufferLoader.load();
             })
             .error(function() {
                 console.log('fail');
@@ -122,6 +135,7 @@ soundboardControllers.controller('soundDetail',
             console.log('changed');
             $scope.savedStatus = 'unsaved';
         };
+
     }
 );
 
