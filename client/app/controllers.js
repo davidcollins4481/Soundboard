@@ -107,9 +107,21 @@ soundboardControllers.controller('soundDetail',
                 var audioSrc = $scope.audioRootDirectory + data.name + '.' + data._extension;
 
                 var onComplete = function(buffers) {
+                    var buffer = buffers[0];
                     debugger;
+                    var source = context.createBufferSource();
+                    source.buffer = buffer;
+
+                    var gainNode = context.createGain();
+                    // turning up the volume
+                    gainNode.gain.value = 10;
+                    console.log("Gain value: " + gainNode.gain.value);
+                    source.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    source.start();
                     // time length of audio file:
                     // length / sampleRate
+
                 };
 
                 var bufferLoader = new BufferLoader(context, [audioSrc], onComplete);
