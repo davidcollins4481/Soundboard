@@ -17,17 +17,17 @@ soundboardControllers.controller('soundboardController',
 
             audio.removeEventListener('ended');
             var resetState = function() {
-                this.className = 'stop';
+                this.className = 'play';
             }.bind(button);
 
             audio.addEventListener("ended", resetState);
 
-            if (button.className === "stop") {
+            if (button.className === "play") {
                 audio.play();
-                button.className = "play";
+                button.className = "stop";
             } else {
                 audio.pause();
-                button.className = "stop";
+                button.className = "play";
             }
         }
 
@@ -102,26 +102,126 @@ soundboardControllers.controller('soundDetail',
         soundsFactory.get($routeParams.name)
             .success(function(data) {
                 $scope.sound = data;
-
+                $scope.gain = 1;
                 var context = new AudioContext();
                 var audioSrc = $scope.audioRootDirectory + data.name + '.' + data._extension;
 
+                var getBuffer = undefined;
+
+                var drawAudioGraph = function() {
+                    var buffer = getBuffer();
+                    console.log('processing...');
+                    // each buffer is of equal length
+                    var isMono = buffer.numberOfChannels == 1;
+                    var drawChannel = function(context, currentChannel, color) {
+                        context.beginPath();
+                        context.strokeStyle = color;
+                        context.lineWidth = 1;
+                        context.moveTo(0, cH/2);
+                        var gap = cW / currentChannel.length;
+
+                        var currentX = 0;
+                        for (var i = 0; i < currentChannel.length; i++) {
+                            currentX = currentX + gap;
+                            var y = (cH/2) + ((currentChannel[i] *-1) * lineMultiplier);
+                            context.lineTo(currentX, y);
+                        }
+
+                        context.stroke();
+                    };
+
+                    var canvas = document.querySelector('.signal-container canvas');
+                    var context = canvas.getContext('2d');
+
+                    var lineMultiplier = 50;
+
+                    var cH = canvas.height;
+                    var cW = canvas.width;
+
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, cW, cH);
+
+                    context.strokeStyle = '#000000';
+                    context.beginPath();
+                    context.moveTo(0, cH/2);
+                    context.lineTo(cW, cH/2);
+                    context.lineWidth = 1;
+                    context.stroke();
+
+                    // draw clip lines
+                    context.beginPath();
+                    context.strokeStyle = 'red';
+                    context.moveTo(0, cH/2  - lineMultiplier);
+                    context.lineTo(cW, cH/2 - lineMultiplier);
+                    context.lineWidth = 1;
+                    context.stroke();
+
+                    context.beginPath();
+                    context.strokeStyle = 'red';
+                    context.moveTo(0, cH/2  + lineMultiplier);
+                    context.lineTo(cW, cH/2 + lineMultiplier);
+                    context.lineWidth = 1;
+                    context.stroke();
+
+                    var leftChannel = buffer.getChannelData(0);
+                    drawChannel(context, leftChannel, "green");
+
+                    console.log('Mono? ' + isMono);
+                    if (!isMono) {
+                        var rightChannel = buffer.getChannelData(1);
+                        drawChannel(context, rightChannel, "blue");
+                    }
+                }
+
                 var onComplete = function(buffers) {
                     var buffer = buffers[0];
-                    debugger;
-                    var source = context.createBufferSource();
-                    source.buffer = buffer;
 
+                    getBuffer = function() {
+                        return buffer;
+                    };
+
+                    drawAudioGraph();
+                };
+
+                var getCurrentPlaying = undefined;
+
+                $scope.play = function(e) {
+                    var button = e.currentTarget;
+                    button.disabled = true;
+
+                    var source = context.createBufferSource();
+                    source.buffer = getBuffer();
                     var gainNode = context.createGain();
-                    // turning up the volume
-                    gainNode.gain.value = 10;
-                    console.log("Gain value: " + gainNode.gain.value);
+
+                    gainNode.gain.value = $scope.gain;
+
                     source.connect(gainNode);
                     gainNode.connect(context.destination);
-                    source.start();
-                    // time length of audio file:
-                    // length / sampleRate
 
+                    // to loop source.loop = true;
+                    source.loop = !!$scope.loop;
+                    source.start()
+
+                    source.onended = function() {
+                        button.disabled = false;
+                    }
+
+                    getCurrentPlaying = function() {
+                        return source;
+                    }
+                };
+
+                $scope.stop = function(e) {
+                    var current = getCurrentPlaying();
+                    current.stop();
+                };
+
+                $scope.save = function(e) {
+                    console.log('saving');
+                    var type = $scope.sound.mimeType;
+                    var channel = getBuffer().getChannelData(1);
+                    var blob = new Blob([channel], {type: type});
+                    var url =  URL.createObjectURL(blob);
                 };
 
                 var bufferLoader = new BufferLoader(context, [audioSrc], onComplete);
