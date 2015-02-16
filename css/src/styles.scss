@@ -158,13 +158,9 @@
 
 .detail {
     .signal-container {
-        width: 300px;
+        width: 100%;
+        max-width: 1000px;
         height: 300px;
         display: inline-block;
-
-        canvas {
-            width: 300px;
-            height: 300px;
-        }
     }
 }

@@ -133,10 +133,10 @@ soundboardControllers.controller('soundDetail',
                     var canvas = document.querySelector('.signal-container canvas');
                     var context = canvas.getContext('2d');
 
-                    var lineMultiplier = 50;
+                    var lineMultiplier = 80;
 
-                    var cH = canvas.height;
-                    var cW = canvas.width;
+                    var cH = canvas.height = 250;
+                    var cW = canvas.width = window.innerWidth - (window.innerWidth / 8);
 
                     context.fillStyle = '#ffffff';
                     context.fillRect(0, 0, cW, cH);
