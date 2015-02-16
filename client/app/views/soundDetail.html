@@ -1,4 +1,4 @@
-<div class="">
+<div class="detail">
 
     <input
         type="text"
@@ -22,8 +22,22 @@
     <p><b>File Size:</b> {{sound.fileSize / 1000 | number:0}} kilobytes</p>
     <p><b>Mime Type:</b> {{sound.mimeType}}</p>
 
+    <hr/>
     <div class="audio-content">
-        
+        <p>Gain</p>
+        <input type="range" name="gain" min="0" max="10" ng-model="gain" />
+        <br/>
+        <input type="checkbox" ng-model="loop"/>Loop
+        <br/>
+        <button ng-click="play($event)">Play</button>
+        <br/>
+        <button ng-click="stop($event)">Stop</button>
+        <br/>
+        <button ng-click="save($event)">Save</button>
+
+        <div class="signal-container">
+            <canvas></canvas>
+        </div>
     </div>
     
 </div>
