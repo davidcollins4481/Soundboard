@@ -157,6 +157,10 @@
 }
 
 .detail {
+    button {
+        display: inline-block;
+    }
+
     .signal-container {
         width: 100%;
         max-width: 1000px;

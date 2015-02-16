@@ -133,7 +133,7 @@ soundboardControllers.controller('soundDetail',
                     var canvas = document.querySelector('.signal-container canvas');
                     var context = canvas.getContext('2d');
 
-                    var lineMultiplier = 80;
+                    var lineMultiplier = 100;
 
                     var cH = canvas.height = 250;
                     var cW = canvas.width = window.innerWidth - (window.innerWidth / 8);
@@ -150,10 +150,12 @@ soundboardControllers.controller('soundDetail',
 
                     // draw clip lines
                     context.beginPath();
+                    //context.setLineDash([4]);
                     context.strokeStyle = 'red';
                     context.moveTo(0, cH/2  - lineMultiplier);
                     context.lineTo(cW, cH/2 - lineMultiplier);
                     context.lineWidth = 1;
+                    context.closePath();
                     context.stroke();
 
                     context.beginPath();
@@ -161,6 +163,7 @@ soundboardControllers.controller('soundDetail',
                     context.moveTo(0, cH/2  + lineMultiplier);
                     context.lineTo(cW, cH/2 + lineMultiplier);
                     context.lineWidth = 1;
+                    context.closePath();
                     context.stroke();
 
                     var leftChannel = buffer.getChannelData(0);
@@ -175,6 +178,11 @@ soundboardControllers.controller('soundDetail',
 
                 var onComplete = function(buffers) {
                     var buffer = buffers[0];
+
+                    // fill out a couple more vars
+                    $scope.duration = buffer.duration.toPrecision(2) + ' seconds';
+                    $scope.channels = buffer.numberOfChannels;
+                    $scope.$apply();
 
                     getBuffer = function() {
                         return buffer;
