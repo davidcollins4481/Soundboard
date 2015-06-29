@@ -9,15 +9,15 @@ soundboardApp
         function($routeProvider) {
             $routeProvider.
                 when('/', {
-                    templateUrl: '/js/app/views/soundboard.html',
+                    templateUrl: '/js/app/views/board.html',
                     controller: 'soundboardController'
                 })
-                .when('/upload-sound', {
+                .when('/upload', {
                     templateUrl: '/js/app/views/uploader.html',
                     controller: 'soundboardUploader'
                 })
-                .when('/sound-detail/:name', {
-                    templateUrl: '/js/app/views/soundDetail.html',
+                .when('/detail/:name', {
+                    templateUrl: '/js/app/views/detail.html',
                     controller: 'soundDetail'
                 })
                 .when('/record', {

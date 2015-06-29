@@ -1,133 +1,32 @@
-@import 'bower_components/bourbon/app/assets/stylesheets/bourbon';
+$icon-font-path: '/bower/bootstrap-sass-official/assets/fonts/bootstrap/';
+$screen-sm-min: 660px;
+
+@import 'bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
 @import 'functions';
 @import 'common';
 @import 'forms';
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.buttons {
-    a {
-        display: inline-block;
-        margin: 10px 2% 0 2%;
-        text-decoration: none;
-        font-size: 20px;
-        &:first-of-type {
-            margin-left: 0;
-        }
-    }
+.navbar {
+    margin-bottom: 0;
 }
 
 .sound {
-    margin-bottom: 40px;
-    display: inline-block;
-    width: 20%;
-
-    @include breakpoint(1100px) {
-        width: 20%;
+    padding-bottom: 15px;
+    @include breakpoint($screen-sm-min) {
+        padding-bottom: 35px;
     }
 
-    @include breakpoint(775px) {
-        width: 33%;
-    }
-
-    @include breakpoint(520px) {
-        width: 50%;
-    }
-
-    p {
-        margin: 0;
-    }
-
-    p.description {
-        min-height: 50px;
-    }
-
-    a.info {
-        &:hover {
-
-        }
-    }
-
-    .sound-inner {
-        width: 110px;
-        @include breakpoint(320px) {
-            width: 100%;
-        }
-
-        .btn-container {
-            display: inline-block;
-            height: 40px;
-            width: 40px;
-            border-radius: 22px;
-            text-align: center;
-
-            .stop {
-                width: 27px;
-                height: 27px;
-                @include linear-gradient(black, #666);
-                display: inline-block;
-                cursor: pointer;
-
-                &:hover {
-                    @include linear-gradient(
-                        black, lighten(#666, 10%)
-                    );
-                }
-            }
-
-            .play {
-                width: 23px;
-                height: 19px;
-                display: inline-block;
-                cursor: pointer;
-                position: relative;
-                top: 5px;
-                left: -7px;
-                @include background(linear-gradient(left, $green, $lightgreen));
-                transform: rotateZ(135deg);
-
-                &:after {
-                    background: #fff;
-                    content: "";
-                    height: 44px;
-                    width: 25px;
-                    position: absolute;
-                    transform: rotateZ(45deg);
-                    left: 2px;
-                    top: 0;
-                }
-
-                &:hover {
-                    @include background(linear-gradient(left, lighten($green, 10%), $lightgreen));
-                }
-            }
-
-            .record {
-                height: 35px;
-                width: 35px;
-                cursor: pointer;
-                @include background(linear-gradient(red, lighten(red, 30%)));
-                display: inline-block;
-                border-radius: 20px;
-                &:hover {
-                    @include background(linear-gradient(red, lighten(red, 40%)));
-                }
+    .glyphicon {
+        &.play, &.stop {
+            font-size: 25px;
+            @include breakpoint($screen-sm-min) {
+                font-size: 37px;
             }
         }
     }
 
-    .info-extended {
-        height: 0;
-        overflow: hidden;
-        @include transition (height .5s ease-in-out, background-color 4s);
-        &.open {
-            height:200px;
-            background-color: #eee;
-            border: 1px solid #D0CFCF;
-        }
+    .play {
+        color: $lightgreen;
     }
 }
 

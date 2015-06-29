@@ -13,21 +13,22 @@ soundboardControllers.controller('soundboardController',
         $scope.toggle = function($event, $obj) {
             console.log($event);
             var button = $event.currentTarget;
-            var audio = button.nextElementSibling;
+            var audio = $event.currentTarget.parentNode.parentElement
+                .querySelector('audio');
 
             audio.removeEventListener('ended');
             var resetState = function() {
-                this.className = 'play';
+                this.className = 'play glyphicon glyphicon-play';
             }.bind(button);
 
             audio.addEventListener("ended", resetState);
 
-            if (button.className === "play") {
+            if (button.classList.contains("play")) {
                 audio.play();
-                button.className = "stop";
+                button.className = "stop glyphicon glyphicon-stop";
             } else {
                 audio.pause();
-                button.className = "play";
+                button.className = "play glyphicon glyphicon-play";
             }
         }
 
@@ -136,25 +137,23 @@ soundboardControllers.controller('soundDetail',
                     var lineMultiplier = 100;
 
                     var cH = canvas.height = 250;
-                    var cW = canvas.width = window.innerWidth - (window.innerWidth / 8);
+                    var cW = canvas.width = window.innerWidth - (window.innerWidth / 3);
 
                     context.fillStyle = '#ffffff';
+                    context.lineWidth = 1;
                     context.fillRect(0, 0, cW, cH);
 
                     context.strokeStyle = '#000000';
                     context.beginPath();
                     context.moveTo(0, cH/2);
                     context.lineTo(cW, cH/2);
-                    context.lineWidth = 1;
                     context.stroke();
 
                     // draw clip lines
                     context.beginPath();
-                    //context.setLineDash([4]);
                     context.strokeStyle = 'red';
                     context.moveTo(0, cH/2  - lineMultiplier);
                     context.lineTo(cW, cH/2 - lineMultiplier);
-                    context.lineWidth = 1;
                     context.closePath();
                     context.stroke();
 
@@ -162,7 +161,6 @@ soundboardControllers.controller('soundDetail',
                     context.strokeStyle = 'red';
                     context.moveTo(0, cH/2  + lineMultiplier);
                     context.lineTo(cW, cH/2 + lineMultiplier);
-                    context.lineWidth = 1;
                     context.closePath();
                     context.stroke();
 
@@ -192,6 +190,14 @@ soundboardControllers.controller('soundDetail',
                 };
 
                 var getCurrentPlaying = undefined;
+
+                $scope.redraw = function(e) {
+                    var analyzer = context.createAnalyzer();
+                    var source = context.createBufferSource();
+                    source.buffer = getBuffer();
+
+                    drawAudioGraph();
+                };
 
                 $scope.play = function(e) {
                     var button = e.currentTarget;

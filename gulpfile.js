@@ -5,7 +5,7 @@ var concat     = require('gulp-concat');
 var rename     = require('gulp-rename');
 var uglify     = require('gulp-uglify');
 var jshint     = require('gulp-jshint');
-var sass       = require('gulp-sass');
+var sass       = require('gulp-ruby-sass');
 var minifycss  = require('gulp-minify-css');
 var livereload = require('gulp-livereload');
 var connect = require('gulp-connect');
@@ -38,10 +38,10 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('sassminify', function () {
-    gulp.src(paths.stylesheets)
-        .pipe(sass())
-        .pipe(concat('all.min.css'))
+    sass(cssbasedir + 'src/styles.scss')
+        .pipe(concat('all.css'))
         .pipe(gulp.dest(cssbasedir + 'dist/'))
+        .pipe(rename('all.min.css'))
         .pipe(minifycss())
         .pipe(gulp.dest(cssbasedir + 'dist/'));
 });
@@ -59,7 +59,7 @@ gulp.task('watch', function() {
 
 gulp.task('livereload-listen', function() {
     livereload.listen();
-    gulp.watch([cssbasedir + 'dist/**', jsbasedir + 'dist/**', '*.html'])
+    gulp.watch([cssbasedir + 'dist/**', jsbasedir + 'dist/**', 'views/*.html'])
         .on('change', livereload.changed);
 });
 
