@@ -21,7 +21,7 @@ soundboardDirectives.directive('dropTarget', function(){
                 e.stopPropagation();
                 e.preventDefault();
                 e.currentTarget.classList.remove('active');
-                var files = e.dataTransfer.files;
+                var files = e.originalEvent.dataTransfer.files;
                 $scope.$emit('filesDragged', files);
                 return false;
             });
