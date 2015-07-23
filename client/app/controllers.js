@@ -11,7 +11,6 @@ soundboardControllers.controller('soundboardController',
             });
 
         $scope.toggle = function($event, $obj) {
-            console.log($event);
             var button = $event.currentTarget;
             var audio = $event.currentTarget.parentNode.parentElement
                 .querySelector('audio');
@@ -35,6 +34,11 @@ soundboardControllers.controller('soundboardController',
         $scope.delete = function($event, $obj) {
             $event.preventDefault();
             console.log('deleting ' + this.sound.name);
+            var deleteSound = confirm('Are you sure you want to do this?');
+            if (!deleteSound) {
+                return;
+            }
+
             soundsFactory.delete(this.sound.name)
                 .success(function(data) {
                     $scope.sounds = data;
@@ -43,16 +47,6 @@ soundboardControllers.controller('soundboardController',
                 .error(function() {
                     console.log('error');
                 });
-        }
-
-        $scope.openExtendedInfo = function(e) {
-            e.preventDefault();
-            $scope.extendedState = 'open';
-        }
-
-        $scope.closeExtendedInfo = function(e) {
-            e.preventDefault();
-            $scope.extendedState = 'closed';
         }
     }
 );
@@ -111,8 +105,7 @@ soundboardControllers.controller('soundDetail',
 
                 var drawAudioGraph = function() {
                     var buffer = getBuffer();
-                    console.log('processing...');
-                    // each buffer is of equal length
+
                     var isMono = buffer.numberOfChannels == 1;
                     var drawChannel = function(context, currentChannel, color) {
                         context.beginPath();

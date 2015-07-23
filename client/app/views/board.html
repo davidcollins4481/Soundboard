@@ -3,10 +3,10 @@
 
     <div ng-repeat="sound in sounds | filter:search" class="col-md-3 col-sm-4 col-xs-12 sound">
         <div class="row">
-            <div class="col-sm-12 col-xs-2">
+            <div class="col-sm-12 col-xs-3">
                 <span class="play glyphicon glyphicon-play" ng-click="toggle($event, this)"></span>
             </div>
-            <div class="col-sm-12 col-xs-10">
+            <div class="col-sm-12 col-xs-9">
                 <audio class="stopped">
                     <source ng-src="{{ audioRootDirectory + sound.name + '.' + sound._extension }}"
                             type="{{sound.mimeType}}" />
